@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: multi-container-pod
+  name: multi-container-pod
+spec:
+  volumes:
+  - name: ephemeral-volume
+    emptyDir: {}
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - while true; do echo "hi wolrd -c1";sleep 60;done
+    image: alpine:3.12.0
+    name: multi-container-pod-1
+    resources: {}
+    volumeMounts:
+    - mountPath: /etc/a
+      name: ephemeral-volume
+  - args:
+    - /bin/sh
+    - -c
+    - while true; do echo "hi wolrd -c2";sleep 60;done
+    image: alpine:3.12.0
+    name: multi-container-pod-2
+    resources: {}
+    volumeMounts:
+    - mountPath: /etc/b
+      name: ephemeral-volume
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
